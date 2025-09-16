@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversione Cicli</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .btn {
+            padding: 12px 24px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .btn-converti {
+            background-color: #28a745;
+        }
+        .btn-converti:hover {
+            background-color: #218838;
+        }
+        .btn-torna {
+            padding: 10px 20px;
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        #fileInput {
+            display: none;
+        }
+        .file-list {
+            margin: 20px auto;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            text-align: left;
+            max-width: 500px;
+        }
+        .file-item {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+            font-family: monospace;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .file-item:last-child {
+            border-bottom: none;
+        }
+        .download-btn {
+            padding: 5px 10px;
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .download-btn:hover {
+            background-color: #138496;
+        }
+        .info {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px auto;
+            max-width: 500px;
+        }
+        .conversion-info {
+            background-color: #d4edda;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px auto;
+            max-width: 500px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Conversione Cicli</h1>
+    
+    <div class="info">
+        <p>Carica i file che intendi convertire</p>
+    </div>
+
+    <!-- Pulsante per caricare i file -->
+    <button class="btn" onclick="document.getElementById('fileInput').click()">
+        🗂️ CARICA CICLI
+    </button>
+    
+    <input type="file" id="fileInput" multiple accept="*" onchange="handleFileSelection(this.files)">
+    
+    <!-- Area per visualizzare l'elenco dei file -->
+    <div id="fileListContainer" class="file-list" style="display: none;">
+        <h3>File Caricati:</h3>
+        <div id="fileList"></div>
+    </div>
+
+    <div class="conversion-info">
+        <h4>Informazioni Conversione:</h4>
+        <p>I file verranno convertiti da formato testo a formato CSV:</p>
+        <p><strong>Formato CSV:</strong> <code>valore1;valore2;valore3</code></p>
+    </div>
+
+    <div>
+        <a href="cicli.html" class="btn-torna">← Torna alla Gestione Cicli</a>
+    </div>
+
+    <script>
+        let selectedFiles = [];
+
+        function handleFileSelection(files) {
+            selectedFiles = Array.from(files);
+            const fileList = document.getElementById('fileList');
+            const fileListContainer = document.getElementById('fileListContainer');
+            
+            // Pulisce la lista precedente
+            fileList.innerHTML = '';
+            
+            if (selectedFiles.length === 0) {
+                fileListContainer.style.display = 'none';
+                return;
+            }
+            
+            // Ordina alfabeticamente
+            selectedFiles.sort((a, b) => a.name.localeCompare(b.name));
+            
+            // Mostra i file in ordine alfabetico con pulsante download
+            selectedFiles.forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                
+                const fileNameSpan = document.createElement('span');
+                fileNameSpan.textContent = `${index + 1}. ${file.name}`;
+                
+                const downloadBtn = document.createElement('button');
+                downloadBtn.className = 'download-btn';
+                downloadBtn.textContent = 'Scarica CSV';
+                downloadBtn.onclick = () => convertiEScaricaFile(file);
+                
+                fileItem.appendChild(fileNameSpan);
+                fileItem.appendChild(downloadBtn);
+                fileList.appendChild(fileItem);
+            });
+            
+            // Mostra il container della lista
+            fileListContainer.style.display = 'block';
+        }
+        
+        function convertiEScaricaFile(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const contenuto = e.target.result;
+                const csvContent = convertiTestoACsv(contenuto);
+                scaricaFile(csvContent, file.name + '.csv');
+            };
+            reader.readAsText(file);
+        }
+        
+        function convertiTestoACsv(contenuto) {
+            const linee = contenuto.split('\n').filter(linea => linea.trim() !== '');
+            let csvContent = '';
+            
+            // Processa ogni gruppo di 3 righe
+            for (let i = 0; i < linee.length; i += 3) {
+                if (i + 2 < linee.length) {
+                    const valore1 = linee[i].trim();
+                    const valore2 = linee[i + 1].trim();
+                    const valore3 = linee[i + 2].trim();
+                    csvContent += `${valore1};${valore2};${valore3}\n`;
+                }
+            }
+            
+            return csvContent;
+        }
+        
+        function scaricaFile(contenuto, nomeFile) {
+            const blob = new Blob([contenuto], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = nomeFile;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+    </script>
+</body>
+</html>
