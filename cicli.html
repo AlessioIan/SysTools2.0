@@ -6,35 +6,85 @@
     <title>Gestione Cicli - Nodo</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 650px;
             margin: 50px auto;
-            padding: 20px;
+            padding: 30px;
             text-align: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 2.2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        p {
+            color: #34495e;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
         }
         .btn-opzione {
-            padding: 15px 30px;
-            font-size: 18px;
-            background-color: #28a745;
+            padding: 16px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: linear-gradient(to right, #28a745, #20c997);
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             text-decoration: none;
-            display: inline-block;
-            margin: 10px;
-            width: 200px;
+            display: block;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
         .btn-opzione:hover {
-            background-color: #218838;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(to right, #218838, #1aa179);
+        }
+        .btn-opzione:active {
+            transform: translateY(0);
         }
         .btn-torna {
             margin-top: 30px;
-            padding: 10px 20px;
-            background-color: #6c757d;
+            padding: 12px 25px;
+            background: linear-gradient(to right, #6c757d, #5a6268);
             color: white;
             text-decoration: none;
-            border-radius: 5px;
+            border-radius: 6px;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+        .btn-torna:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(to right, #5a6268, #4a5056);
+        }
+        .icon {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+        .divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #ddd, transparent);
+            margin: 25px 0;
+        }
+        .info-box {
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            border-left: 4px solid #28a745;
         }
     </style>
 </head>
@@ -42,10 +92,22 @@
     <h1>Gestione Cicli</h1>
     <p>Scegli l'operazione da effettuare:</p>
     
-    <div>
-        <a href="conversione.html" class="btn-opzione">CONVERSIONE CICLI</a>
-        <br>
-        <a href="modifica.html" class="btn-opzione">MODIFICA CICLI</a>
+    <div class="btn-container">
+        <a href="conversione.html" class="btn-opzione">
+            <span class="icon">🔄</span>CONVERSIONE CICLI
+        </a>
+        <a href="conversione.html" class="btn-opzione" style="background: linear-gradient(to right, #007bff, #6610f2);">
+            <span class="icon">⚙️</span>NUOVO PULSANTE CONVERSIONE
+        </a>
+        <a href="modifica.html" class="btn-opzione" style="background: linear-gradient(to right, #ff6b6b, #ff8e8e);">
+            <span class="icon">✏️</span>MODIFICA CICLI
+        </a>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="info-box">
+        <p>Il nuovo pulsante "CONVERSIONE CICLI" ti porterà alla pagina di conversione</p>
     </div>
 
     <div>
